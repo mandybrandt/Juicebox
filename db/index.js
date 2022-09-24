@@ -40,7 +40,7 @@ async function updateUser(id, fields = {}) {
         return;
     }  
     try {
-        const { rows: [ user]} = await client.query(`
+        const { rows: [ user ]} = await client.query(`
             UPDATE users
             SET ${ setString }
             WHERE id=${ id }
@@ -54,9 +54,85 @@ async function updateUser(id, fields = {}) {
     }
 }
 
+async function createPost({
+    authorId,
+    title,
+    content
+}) {
+    try {
+        const { rows: [post]} = await client.query(`
+        INSERT INTO post(authorId, title, content)     
+        RETURNING *;
+        `, [authorId, title, content]);
+
+    return post;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function updatePost(id, {
+    title,
+    content,
+    active
+    }) {
+    try {
+        const { rows: [ post ]} = await client.query(`
+            UPDATE post
+            SET ${ setString }
+            WHERE id=${ id }
+            RETURNING *;
+
+        `, [title, content, active]);
+
+        return post;
+    } catch (error) {
+      throw error;
+    }
+}
+
+async function getAllPosts() {
+    const { rows } = await client.query(
+        `SELECT authorId, title, content
+        FROM posts;
+        `);
+
+    return rows;
+}
+
+async function getUserById(userId) {
+    try {
+        const { rows: [user] } = await client.query(`
+        SELECT id, username, location, name, active FROM users
+        WHERE id=${ userId };
+        `);
+        if (!user) {
+            return NULL;
+        } else {
+            user.posts = await getPostsByUser(userId)}
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getPostsByUser(userId) {
+    try {
+        const { rows } = await client.query(`
+        SELECT * FROM posts
+        WHERE "authorId"=${ userId };
+        `);
+
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     client,
     getAllUsers,
     createUser,
-    updateUser,  
+    updateUser, 
+    getUserById, 
 }
