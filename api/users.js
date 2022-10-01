@@ -1,5 +1,9 @@
 const express = require('express');
+const { reset } = require('nodemon');
 const usersRouter = express.Router();
+const jwt = require('jsonwebtoken');
+
+const { getAllUsers, getUserByUsername, createUser } = require('../db');
 
 usersRouter.use((req, res, next) => {
     console.log("A request is being made to /users");
@@ -7,13 +11,11 @@ usersRouter.use((req, res, next) => {
    next();
 });
 
-const { getAllUsers, getUserByUsername, createUser } = require('../db');
-
 usersRouter.get('/', async (req, res) => {
     const users = await getAllUsers();
 
     res.send({
-      users: []
+      users
     });
 });
 
@@ -34,7 +36,7 @@ usersRouter.post('/register', async (req, res, next) => {
       username,
       password,
       name,
-      location,
+      location
     });
 
     const token = jwt.sign({
@@ -63,11 +65,14 @@ usersRouter.post('/login', async (req, res, next) => {
     });
   }
 
+  const token = jwt.sign({id: 1, username: 'albert'}, process.env.JWT_SECRET);
+
   try {
     const user = await getUserByUsername(username);
 
     if (user && user.password == password) {
-      res.send({ message: "you're logged in!" });
+      res.send({ message: "you're logged in!", token });
+  
     } else {
       next({
         name: 'IncorrectCredentialsError',
@@ -80,15 +85,5 @@ usersRouter.post('/login', async (req, res, next) => {
   }
 });
 
-const jwt = require('jsonwebtoken');
-const token = jwt.sign({ id: 3, username: 'joshua' }, 'server secret', { expires: '1hr' });
-
-token;
-
-const recoveredData = jwt.verify(token, 'server secret');
-
-recoveredData;
-
-jwt.verify(token, 'server secret');
 
 module.exports = usersRouter;

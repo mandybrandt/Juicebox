@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const apiRouter = express.Router();
 const jwt = require('jsonwebtoken');
@@ -46,5 +47,7 @@ apiRouter.use((error, req, res, next) => {
         message: error.message
     });
 });
+
+
 
 module.exports = apiRouter;
