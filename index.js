@@ -23,6 +23,7 @@ server.get('/add/:first/to/:second', (req, res, next) => {
 });
 
 const apiRouter = require('./api');
+const { Client } = require('pg');
 server.use('/api', apiRouter);
 
 server.listen(PORT, () => {
