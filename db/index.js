@@ -143,7 +143,7 @@ async function updatePost(postId, fields = {}) {
         ).join(', ');
 
         await client.query(`
-    DELETE FROM post)tags
+    DELETE FROM post_tags
     WHERE "tagId"
     NOT IN (${tagListIdString})
     AND "postId"=$1;
