@@ -6,17 +6,17 @@ const jwt = require('jsonwebtoken');
 const { getAllUsers, getUserByUsername, createUser } = require('../db');
 
 usersRouter.use((req, res, next) => {
-    console.log("A request is being made to /users");
+  console.log("A request is being made to /users");
 
-   next();
+  next();
 });
 
 usersRouter.get('/', async (req, res) => {
-    const users = await getAllUsers();
+  const users = await getAllUsers();
 
-    res.send({
-      users
-    });
+  res.send({
+    users
+  });
 });
 
 usersRouter.post('/register', async (req, res, next) => {
@@ -65,25 +65,24 @@ usersRouter.post('/login', async (req, res, next) => {
     });
   }
 
-  const token = jwt.sign({id: 1, username: 'albert'}, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: 1, username: 'albert' }, process.env.JWT_SECRET);
 
   try {
     const user = await getUserByUsername(username);
 
     if (user && user.password == password) {
       res.send({ message: "you're logged in!", token });
-  
+
     } else {
       next({
         name: 'IncorrectCredentialsError',
-        message: 'Username or password is incorrect'    
+        message: 'Username or password is incorrect'
       });
     }
-  } catch(error) {
+  } catch (error) {
     console.log(error);
     next(error);
   }
 });
-
 
 module.exports = usersRouter;

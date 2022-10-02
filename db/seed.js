@@ -1,4 +1,3 @@
-// const { query } = require('express');
 const {
     client,
     createUser,
@@ -13,7 +12,7 @@ const {
     addTagsToPost,
     getPostById,
     getAllTags,
-    getUserByUsername,  
+    getUserByUsername,
 } = require('./index');
 
 async function dropTables() {

@@ -5,9 +5,6 @@ const server = express();
 const { client } = require('./db');
 client.connect();
 
-// const bodyParser = require('body-parser');
-// server.use(bodyParser.json());
-
 const morgan = require('morgan');
 server.use(morgan('dev'));
 
@@ -18,7 +15,11 @@ server.use((req, res, next) => {
     console.log(req.body);
     console.log("<___Body Logger END___>");
 
-next();
+    next();
+});
+
+server.get('/add/:first/to/:second', (req, res, next) => {
+    res.send(`<h1>${req.params.first} + ${req.params.second} = ${Number(req.params.first) + Number(req.params.second)}<h1>`);
 });
 
 const apiRouter = require('./api');
