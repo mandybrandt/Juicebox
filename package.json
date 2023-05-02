@@ -1,11 +1,11 @@
 {
   "name": "juicebox",
   "version": "1.0.0",
-  "description": "",
+  "description": "What are we building?\r Nothing less than a Back-End-Only project. We are going to make a \"Simple\" Tumblr clone. I use quotes around simple because it will be anything but simple for us to implement.",
   "main": "index.js",
   "scripts": {
     "seed:dev": "nodemon ./db/seed.js",
-    "seed": "node ./db/seed.js", 
+    "seed": "node ./db/seed.js",
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
