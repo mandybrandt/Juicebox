@@ -1,9 +1,16 @@
+// In general, in our db/index.js file we should provide the utility functions that the rest of our application will use. 
+// We will call them from the seed file, but also from our main application file.
+// That is where we are going to listen to the front-end code making AJAX requests to certain routes, and will need to make our own requests to our database.
+
+// import the pg module
 const { Client } = require('pg');
 
+// supply the db name and location of the database
 const client = new Client({connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/juicebox-dev',
 ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false } : undefined,
 });
 
+// Setting up the database.
 async function createUser({
     username,
     password,
@@ -48,18 +55,27 @@ async function updateUser(id, fields = {}) {
     }
 }
 
+// 1st helper function to use throughout the application
+// 1st draft
 async function getAllUsers() {
-    try {
-        const { rows } = await client.query(`
-            SELECT id, username, name, location, active
-            FROM users;
-            `);
-
-        return rows;
-    } catch (error) {
-        throw error;
-    }
+    const { rows } = await client.query(
+        `SELECT id, username 
+        FROM users;
+        `);
+    return rows;
 }
+// async function getAllUsers() {
+//     try {
+//         const { rows } = await client.query(`
+//             SELECT id, username, name, location, active
+//             FROM users;
+//             `);
+
+//         return rows;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
 
 async function getUserById(userId) {
     try {
@@ -319,8 +335,9 @@ async function getPostsByTagName(tagName) {
     }
 }
 
+// export client and helper functions for global access to the database.
 module.exports = {
-    client,
+    client, 
     createUser,
     updateUser,
     getAllUsers,

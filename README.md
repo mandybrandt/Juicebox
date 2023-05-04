@@ -9,66 +9,41 @@ OS X
 If you're on a Mac, you can head right over to http://postgresapp.com/ and follow the instructions there to get a full-featured installation of postgres, including the psql command line tool. Be sure to follow the set up your $PATH link and follow the instructions there. Note that if you need to update your shell profile, bash uses ~/.bash_profile and zsh uses ~/.zshrc.
 
 Optionally, we recommend Mac users install Postico, a GUI client to interact with your databses.
-Ubuntu (or Windows on your Ubuntu Virtual Machine)
-Follow this link for a more in-depth overview. https://help.ubuntu.com/community/PostgreSQL  In general, here's the sequence of commands we've seen work for others:
+Start with psql:
+Setting up:  sudo-apt-get
+createdb
+psql // see if you're in (mandy=#)
+\q to get out.
 
-user@fullstack:~ ()sudo apt-get install postgresql postgresql-contrib
-sudo service postgresql start
-sudo -u postgres createuser --superuser $USER
-createdb $USER
+mandy=# CREATE DATABASE users;
+\c name_of_database; */connect to the database/*
+Once in the database:
+CREATE TABLE users(id SERIAL PRIMARY KEY, username varchar(255) UNIQUE NOT NULL, password varchar(255) NOT NULL);
+\d //shows table
 
-Finally, later when we use the node.js sequelize library, we will attempt to connect to our local PostgreSQL server using Javascript—e.g. var db = new Sequelize('postgres://localhost/database_name'). By default PostgreSQL will require a username and password for such connections, and that means we would have to include that in our Javascript code as well ('postgres://username:password@localhost/database_name'). In order to avoid that headache we've found it's useful to configure "trust" for such connections.
+mandy=#INSERT INTO users (username, password) VALUES ('albert', 'bertie99'), */add values for all users/*
 
-Postgres uses a file, pg_hba.conf, to control who can access the databases, and what they can do when they do it. We will have to edit that file to
+//Check tables
+SELECT * FROM users;
+SELECT id, username FROM users WHERE username='albert' AND password='bertie99';
 
-# locate the file using the find command
-find / -name pg_hba.conf
-# you might get some warnings about directories that find can't access, ignore them
+Move into node
+npm install pg
+npm install nodemon --save-dev //live reload
+edit "scripts" in package.json:
+{
+    "scripts": {
+        "seed:dev": "nodemon ./db/seed.js"
+    }
+}
 
-# eventually it will find something like this:
-# /etc/postgresql/12/main/pg_hba.conf
+Seeding
+When we talk about seeding, we mean one or more of the following:
 
-# use that file path from above here:
-sudo vi /etc/postgresql/12/main/pg_hba.conf 
-# we need to edit this file as root
-Once your in the file editor, use your arrow keys to navigate to lines that look something like this:
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-local   all             postgres                                peer
-local   all             all                                     md5
-host    all             all             127.0.0.1/32            md5
-host    all             all             ::1/128                 md5
-#local   replication     postgres                                peer
-#host    replication     postgres        127.0.0.1/32            md5
-#host    replication     postgres        ::1/128                 md5
-For now, change the METHOD for the ones with TYPE equal to local or host to trust. That will mean that your local development machine won't need login/password combinations from your node programs to access the database.
+Making sure that the tables have correct definitions
+Making sure that the tables have no unwanted data
+Making sure that the tables have some data for us to play with
+Making sure that the tables have necessary user-facing data
+We are going to primarily use our seed file to build/rebuild the tables, and to fill them with some starting data. We need a programmatic way to do this, rather than having to connect directly to the SQL server and directly type in the queries by hand.
 
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-local   all             postgres                                trust
-local   all             all                                     trust
-host    all             all             127.0.0.1/32            trust
-host    all             all             ::1/128                 trust
-To change the file in vi:
-
-Type the letter i, which puts you in insert mode
-Now you can navigate, use backspace, and type
-Once you make changes to the relevant lines above:
-
-Hit your escape key to leave insert mode
-Type a colon (:)
-Type wq and hit return
-This will save the file, and return you to the terminal. Once there, type this:
-
-sudo service postgresql restart
-And you should be good to go. One way to check is this:
-
-# go into your postgres db as the user named postgres
-psql -U postgres 
-
-# CORRECT SETTINGS:
-# psql (9.6.17)
-# Type "help" for help.
-#
-# postgres=# 
-
-# INCORRECT SETTINGS:
-# psql: FATAL:  Peer authentication failed for user "postgres"
+Let's work a bit on these goals, starting with dropping and rebuilding the tables:

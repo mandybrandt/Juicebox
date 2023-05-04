@@ -1,3 +1,5 @@
+// grab our client with destructuring from the export in index.js
+// Also, grab the helper functions from index.js
 const {
     client,
     createUser,
@@ -16,6 +18,7 @@ const {
     getPostsByTagName,
 } = require('./index');
 
+// this function should call a query which drops all tables from our database
 async function dropTables() {
     try {
         console.log("Starting to drop tables...");
@@ -30,10 +33,11 @@ async function dropTables() {
         console.log("Finished dropping tables!");
     } catch (error) {
         console.error("Error dropping tables!");
-        throw error;
+        throw error; //we pass the error up to the function that calls dropTables
     }
 }
 
+// this function should call a query which creates all tables for our database
 async function createTables() {
     try {
         console.log("Starting to build tables...");
@@ -73,6 +77,7 @@ async function createTables() {
     }
 }
 
+// Function that attempts to create a few users
 async function createInitialUsers() {
     try {
         console.log("Starting to create users...");
@@ -169,69 +174,75 @@ async function rebuildDB() {
         await createInitialPosts();
         await createInitialTags();
     } catch (error) {
-        console.log("Error during rebuildDB")
         throw error;
-    }
+    } 
 }
 
 async function testDB() {
     try {
-        console.log("Starting to test database...");
+        // connect the client to the database
+        // Include helper functions
+        // queries are promises, so we can await them
+        console.log("Starting to test database...")
 
-        console.log("Calling getAllUsers");
         const users = await getAllUsers();
-        console.log("Result:", users);
-
-        console.log("Calling updateUser on users[0]");
-        const updateUserResult = await updateUser(users[0].id, {
-            name: "Newname Sogood",
-            location: "Lesterville, KY"
-        });
-        console.log("Result:", updateUserResult);
-
-        console.log("Calling getAllPosts");
-        const posts = await getAllPosts();
-        console.log("Result:", posts);
-
-        console.log("Calling updatePost on posts[0]");
-        const updatePostResult = await updatePost(posts[0].id, {
-            title: "New Title",
-            content: "Updated Content"
-        });
-        console.log("Result:", updatePostResult);
-
-        console.log("Calling getUserById with 1");
-        const albert = await getUserById(1);
-        console.log("Result:", albert);
-
-        console.log("Calling getPostsByUser with 1");
-        const user = await getPostsByUser(1);
-        console.log("Result:", user);
-
-        console.log("getPostById with 1");
-        const id = await getPostById(1);
-        console.log("Result:", id);
-
-        console.log("Calling updatePost on posts[1], only updating tags");
-        const updatePostTagsResult = await updatePost(posts[1].id, {
-            tags: ["#youcandoanything", "#redfish", "#bluefish"]
-        });
-        console.log("Result:", updatePostTagsResult);
-
-        console.log("Calling getPostsByTagName with #happy");
-        const postsWithHappy = await getPostsByTagName("#happy");
-        console.log("Result:", postsWithHappy);
-
+        console.log("getAllusers:", users);
+            // for now, logging helps us see what is going on
         console.log("Finished database tests!");
     } catch (error) {
         console.error("Error testing database!");
         throw error;
-    }
+    } 
 }
-
 
 rebuildDB()
     .then(testDB)
     .catch(console.error)
-    .finally(() => client.end());
+    .finally(() => client.end()); 
+
+
+
+
+//         console.log("Calling getAllUsers");
+//         
+//         console.log("Calling updateUser on users[0]");
+//         const updateUserResult = await updateUser(users[0].id, {
+//             name: "Newname Sogood",
+//             location: "Lesterville, KY"
+//         });
+//         console.log("Result:", updateUserResult);
+
+//         console.log("Calling getAllPosts");
+//         const posts = await getAllPosts();
+//         console.log("Result:", posts);
+
+//         console.log("Calling updatePost on posts[0]");
+//         const updatePostResult = await updatePost(posts[0].id, {
+//             title: "New Title",
+//             content: "Updated Content"
+//         });
+//         console.log("Result:", updatePostResult);
+
+//         console.log("Calling getUserById with 1");
+//         const albert = await getUserById(1);
+//         console.log("Result:", albert);
+
+//         console.log("Calling getPostsByUser with 1");
+//         const user = await getPostsByUser(1);
+//         console.log("Result:", user);
+
+//         console.log("getPostById with 1");
+//         const id = await getPostById(1);
+//         console.log("Result:", id);
+
+//         console.log("Calling updatePost on posts[1], only updating tags");
+//         const updatePostTagsResult = await updatePost(posts[1].id, {
+//             tags: ["#youcandoanything", "#redfish", "#bluefish"]
+//         });
+//         console.log("Result:", updatePostTagsResult);
+
+//         console.log("Calling getPostsByTagName with #happy");
+//         const postsWithHappy = await getPostsByTagName("#happy");
+//         console.log("Result:", postsWithHappy);
+
 
