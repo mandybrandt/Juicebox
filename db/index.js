@@ -5,6 +5,7 @@
 // import the pg module
 const { Client } = require('pg'); //day 1
 
+
 // supply the db name and location of the database
 const client = new Client({connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/juicebox-dev', // day 1
 ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false } : undefined,
@@ -307,6 +308,7 @@ async function addTagsToPost(postId, tagList) {
     }
 }
 
+// Added in Part 2, day 1, section 3
 async function getAllTags() {
     try {
         const { rows } = await client.query(`

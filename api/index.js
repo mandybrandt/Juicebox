@@ -1,3 +1,23 @@
+// PART 2
+// The api folder handles the routes.  
+// Often we have a collection of common routes. For our app, we will define the following routes:
+// POST /api/users/register
+// POST /api/users/login
+// DELETE /api/users/:id
+
+// GET /api/posts
+// POST /api/posts
+// PATCH /api/posts/:id
+// DELETE /api/posts/:id
+
+// GET /api/tags
+// GET /api/tags/:tagName/posts
+
+// The express object is useful for more than creating a server. 
+// Here we use the Router function to create a new router, and then export it from the script.
+// Now, inside the new api/index.js we can require and attach it to an apiRouter:
+
+
 require('dotenv').config();
 const express = require('express');
 const apiRouter = express.Router();
@@ -32,9 +52,11 @@ apiRouter.use(async (req, res, next) => {
     }
 });
 
+// Part 2, day 1, part 1
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
+// Part 2, day 1, part 2
 const postsRouter = require('./posts');
 apiRouter.use('/posts', postsRouter);
 

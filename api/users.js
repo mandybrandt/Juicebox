@@ -1,8 +1,10 @@
+// Part 2, Day 1: const express and usersRouter
 const express = require('express');
 const { reset } = require('nodemon');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 
+// Day 1: allows us to get the users from the database and send them back.
 const { getAllUsers, getUserByUsername, createUser } = require('../db');
 
 usersRouter.use((req, res, next) => {
@@ -11,6 +13,8 @@ usersRouter.use((req, res, next) => {
   next();
 });
 
+// Day 1: That middleware will fire whenever a GET request is made to /api/users
+// The async request gets and returns the users from the database.
 usersRouter.get('/', async (req, res) => {
   const users = await getAllUsers();
 

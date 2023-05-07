@@ -55,3 +55,20 @@ name VARCHAR(255) NOT NULL
 location VARCHAR(255) NOT NULL
 active BOOLEAN DEFAULT true
 So go back to your table definition in db/seed.js and update the table definition accordingly.
+
+PART 2:
+Node
+Express
+Use express
+Provide endpoints with 4 "verbs"
+GET /posts (see posts)
+POST /posts (create post)
+PATCH /posts/:id (update post)
+DELETE /posts/:id (deactivate post)
+Paramaterized routes
+GET /tags/:tagName/posts (list of all posts with that tagname)
+Sub-routes
+/api/tags as a sub-route of /api
+JWT
+jwt and jwt-express
+HTTP Requests

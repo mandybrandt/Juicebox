@@ -1,3 +1,5 @@
+// Part 2 day 1, section 2
+// create a new router (postsRouter)
 const express = require('express');
 const postsRouter = express.Router();
 const { requireUser } = require('./utils');
@@ -40,6 +42,8 @@ postsRouter.use((req, res, next) => {
 
 const { getAllPosts } = require('../db');
 
+// Part 2; day 1; section 2
+// call getAllPosts and return the result
 postsRouter.get('/', async (req, res, next) => {
   try {
     const allPosts = await getAllPosts();

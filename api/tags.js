@@ -1,3 +1,5 @@
+// Part 2, day 1, section 3
+// create new router: tagsRouter
 const express = require('express');
 const tagsRouter = express.Router();
 
@@ -7,7 +9,9 @@ tagsRouter.use((req, res, next) => {
   next();
 });
 
-
+// Part 2, day 1, section 3
+// add middleware to run when the user makes a GET request to /api/tags
+// need to add getAllTags to db/index.js
 tagsRouter.get('/:tagName/posts', async (req, res, next) => {
   const { getAllTags, getPostsByTagName, getAllPosts } = require('../db');
   
