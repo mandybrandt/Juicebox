@@ -47,3 +47,11 @@ Making sure that the tables have necessary user-facing data
 We are going to primarily use our seed file to build/rebuild the tables, and to fill them with some starting data. We need a programmatic way to do this, rather than having to connect directly to the SQL server and directly type in the queries by hand.
 
 Let's work a bit on these goals, starting with dropping and rebuilding the tables:
+
+Updating our Users Table
+We need to add the following fields:
+
+name VARCHAR(255) NOT NULL
+location VARCHAR(255) NOT NULL
+active BOOLEAN DEFAULT true
+So go back to your table definition in db/seed.js and update the table definition accordingly.
