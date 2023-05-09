@@ -72,3 +72,68 @@ Sub-routes
 JWT
 jwt and jwt-express
 HTTP Requests
+
+PART 2, DAY 2: JSON WEB TOKENS
+EXAMPLE: 
+const token = jwt.sign({ id: 3, username: 'joshua' }, 'server secret', { expiresIn: '1h' });
+
+token; // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvc2h1YSIsImlhdCI6MTU4ODAyNDkwMSwiZXhwIjoxNTg4MDI4NTAxfQ.LGqAMv7Bc7xKKHiQp8m4bpqR53h5dJBOZ4Kv2b9qmqY'
+
+const recoveredData = jwt.verify(token, 'server secret');
+
+recoveredData; // { id: 3, username: 'joshua', iat: 1588024901, exp: 1588028501 }
+
+// wait 1 hour:
+
+jwt.verify(token, 'server secret');
+
+// Uncaught TokenExpiredError: jwt expired {
+//   name: 'TokenExpiredError',
+//   message: 'jwt expired',
+//   expiredAt: 2020-04-27T21:58:57.000Z
+// }
+
+THE USER REQUEST
+We will require the front end to make requests that look like this:
+
+fetch('our api url', {
+  method: 'SOME_METHOD',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer HOLYMOLEYTHISTOKENISHUGE'
+  },
+  body: JSON.stringify({})
+})
+We need the Content-Type set so that our bodyParser module will be able to read off anything we need from the user (like form data).
+
+We need the Authorization set so that we can read off that Bearer token. It will look something like this:
+
+server.use(async (req, res, next) => {
+  const prefix = 'Bearer '
+  const auth = req.headers['Authorization'];
+
+  if (!auth) {
+    next(); // don't set req.user, no token was passed in
+  }
+
+
+  if (auth.startsWith(prefix)) {
+    // recover the token
+    const token = auth.slice(prefix.length);
+    try {
+      // recover the data
+      const { id } = jwt.verify(data, 'secret message');
+
+      // get the user from the database
+      const user = await getUserById(id);
+      // note: this might be a user or it might be null depending on if it exists
+
+      // attach the user and move on
+      req.user = user;
+
+      next();
+    } catch (error) {
+      // there are a few types of errors here
+    }
+  }
+})

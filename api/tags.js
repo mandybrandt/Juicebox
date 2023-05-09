@@ -3,6 +3,7 @@
 const express = require('express');
 const tagsRouter = express.Router();
 
+const { getAllTags, getPostsByTagName, } = require('../db');
 
 // Make the router
 tagsRouter.use((req, res, next) => {
@@ -11,31 +12,27 @@ tagsRouter.use((req, res, next) => {
   next();
 });
 
-const { getAllTags, getPostsByTagName, getAllPosts } = require('../db');
+// const { getAllPosts, getPostsByTagName, getAllTags } = require('../db');
+// const { getAllTags } = require('../db');
   
-
 // Part 2, day 1, section 3
 // add middleware to run when the user makes a GET request to /api/tags
 // need to add getAllTags to db/index.js
+tagsRouter.get('/', async (req, res) => {
+  const tags = await getAllTags();
+
+  res.send({
+    tags
+  });
+});
+
 tagsRouter.get('/:tagName/posts', async (req, res, next) => {
+  const tagName = req.params.tagName
   try {
-    const allTags = await getAllTags(req.params.tags);
-    const tagName = await getPostsByTagName(req.params.tagName);
-    const allPosts = await getAllPosts();
-    const posts = allPosts.filter(post => {
-      if (post.active) {
-        return true;
-      }
-
-      if (req.user && post.author.id === req.user.id) {
-        return true;
-      }
-
-      return false;
-    });
+    const posts =  await getPostsByTagName(tagName);
 
     res.send
-      ({ posts: posts });
+      ({ posts });
 
   } catch ({ name, message }) {
     next({ name, message });

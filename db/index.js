@@ -104,6 +104,8 @@ async function getUserById(userId) {
     }
 }
 
+// Part 2, day 2:
+// Looking over our database calls, we have one to look up a user by id, but not by username. Maybe we should go create that
 async function getUserByUsername(username) {
     try {
         const { rows: [user] } = await client.query(`

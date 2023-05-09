@@ -21,6 +21,7 @@
 require('dotenv').config();
 const express = require('express');
 const apiRouter = express.Router();
+// Protects our API, so it goes in the api index
 const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
@@ -64,6 +65,8 @@ apiRouter.use('/posts', postsRouter);
 const tagsRouter = require('./tags');
 apiRouter.use('/tags', tagsRouter);
 
+// Since we are using our server as an API, it would be more useful to us for any errors coming out of a request to /api (and its children) to be a JSON error object.
+// So, at the bottom of api/index.js (after all routers are attached) we can add a simple error handler:
 apiRouter.use((error, req, res, next) => {
     res.send({
         name: error.name,
