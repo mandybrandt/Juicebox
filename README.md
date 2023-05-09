@@ -137,3 +137,10 @@ server.use(async (req, res, next) => {
     }
   }
 })
+
+PART 2 DAY 3
+Writing `DELETE /api/posts/:id`
+Let's start our journey into deactivation at the post level. We will need to do two things:
+
+Hook up the route that will let us deactivate the post.
+Possibly update existing methods/routes that return posts to the client depending on if they should have access to deactivated posts (or not).

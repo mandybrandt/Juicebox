@@ -1,3 +1,4 @@
+// Part 2, day 3
 function requireUser(req, res, next) {
     if (!req.user) {
         next({
