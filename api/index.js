@@ -57,6 +57,7 @@ const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
 // Part 2, day 1, part 2
+// import and attach the postsRouter
 const postsRouter = require('./posts');
 apiRouter.use('/posts', postsRouter);
 

@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 // Day 1: allows us to get the users from the database and send them back.
 const { getAllUsers, getUserByUsername, createUser } = require('../db');
 
+// Part 2, Day 1: an example route. 
 usersRouter.use((req, res, next) => {
   console.log("A request is being made to /users");
 

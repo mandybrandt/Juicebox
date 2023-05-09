@@ -20,7 +20,6 @@ postsRouter.post('/', requireUser, async (req, res, next) => {
 
   try {
 
-
     const post = await createPost(postData);
 
     if (post) {
@@ -34,6 +33,7 @@ postsRouter.post('/', requireUser, async (req, res, next) => {
   }
 });
 
+// Part 2, day 1: Create new router.
 postsRouter.use((req, res, next) => {
   console.log("A request is being made to /posts");
 
@@ -43,6 +43,9 @@ postsRouter.use((req, res, next) => {
 const { getAllPosts } = require('../db');
 
 // Part 2; day 1; section 2
+// Then add middleware to run when the user makes a GET request to /api/posts.
+// When they do, call getAllPosts from our database (don't forget to require it)
+// Return the result.
 // call getAllPosts and return the result
 postsRouter.get('/', async (req, res, next) => {
   try {
