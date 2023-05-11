@@ -1,8 +1,8 @@
-const PORT = 3000;
+// const PORT = 3000;
 
 // // Express is our web server
-// require('dotenv').config();
-// const { PORT = 3000} = process.env;
+require('dotenv').config();
+const { PORT = 3000} = process.env;
 const express = require('express');
 const server = express();
 
@@ -13,8 +13,8 @@ server.listen(PORT, () => {
     console.log('The server is up on port', PORT)
 });
 
-// const apiRouter = require('./api');
-// server.use('/api', apiRouter);
+const apiRouter = require('./api');
+server.use('/api', apiRouter);
 
 
 // // Middleware: any function that can run between a request coming in and a response going out.
@@ -40,13 +40,13 @@ server.use((req, res, next) => {
     next();
 });
 
-// server.get('/add/:first/to/:second', (req, res, next) => {
-//     res.send(`<h1>${req.params.first} + ${req.params.second} = ${Number(req.params.first) + Number(req.params.second)}<h1>`);
-// });
+server.get('/add/:first/to/:second', (req, res, next) => {
+    res.send(`<h1>${req.params.first} + ${req.params.second} = ${Number(req.params.first) + Number(req.params.second)}<h1>`);
+});
 
 // // Part 2: Day 1:apiRouter
 const apiRouter = require('./api');
-// const { Client } = require('pg');
+const { Client } = require('pg');
 server.use('/api', apiRouter);
 
 
