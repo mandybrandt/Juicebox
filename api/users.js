@@ -1,6 +1,6 @@
 // Part 2, Day 1: const express and usersRouter
 const express = require('express');
-const { reset } = require('nodemon');
+// const { reset } = require('nodemon');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 
