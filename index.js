@@ -13,10 +13,6 @@ server.listen(PORT, () => {
     console.log('The server is up on port', PORT)
 });
 
-// const apiRouter = require('./api');
-// server.use('/api', apiRouter);
-
-
 // // Middleware: any function that can run between a request coming in and a response going out.
 // // Morgan logs out each incoming request without us having to write a log in each route.
 const morgan = require('morgan');
